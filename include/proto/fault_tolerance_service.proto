@@ -1,0 +1,33 @@
+syntax="proto3";
+package fault_tolerance_service;
+
+option cc_generic_services = true;
+
+// 要实现的是coordinator接收其他参与者的心跳请求, 并返回存活
+message CoordinatorStatusRequest{}
+message CoordinatorStatusResponse{
+    bool activate = 1;
+}
+
+message ParticipantStatusRequest{}
+message ParticipantStatusResponse{
+    bool activate = 1;
+}
+
+message NewCoordinatorRequest{
+    uint64 txn_id = 1;
+    message IP_Port{
+        string ip = 1;
+        uint32 port = 2;
+    }
+    repeated IP_Port ips = 2;
+}
+
+message NewCoordinatorResponse{}
+
+service FaultToleranceService {
+    rpc getCoordinatorStatus(CoordinatorStatusRequest) returns (CoordinatorStatusResponse);
+    rpc getParticipantStatus(ParticipantStatusRequest) returns (ParticipantStatusResponse);
+    rpc NewCoordinator(NewCoordinatorRequest) returns(NewCoordinatorResponse);
+    
+};

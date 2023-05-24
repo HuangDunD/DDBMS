@@ -1,0 +1,9 @@
+[submodule "deps/googletest"]
+	path = deps/googletest
+	url = https://github.com/google/googletest
+[submodule "deps/brpc"]
+	path = deps/brpc
+	url = git@github.com:apache/brpc.git
+[submodule "deps/snappy"]
+	path = deps/snappy
+	url = git@github.com:HuangDunD/snappy.git

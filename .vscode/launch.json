@@ -1,0 +1,203 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "(gdb) 附加",
+            "type": "cppdbg",
+            "request": "attach",
+            "processId":"${command:pickProcess}", 
+            "program": "${workspaceFolder}/build/test/benchmark/benchmark_test",
+            // "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            // "sourceFileMap":{
+            //     "/AAA/": "/BBB/"
+            // },
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "miDebuggerPath": "/usr/bin/gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        },
+        // {
+        //     "name": "(gdb) server2",
+        //     "type": "cppdbg",
+        //     "request": "launch",
+        //     // "program": "${fileDirname}/build/${fileBasenameNoExtension}",
+        //     "program": "${workspaceFolder}/build/test/transaction/transaction_test2",
+        //     "args": [
+        //         "-SERVER_NAME", "server2", 
+        //         "-SERVER_LISTEN_PORT", "8003",
+        //         "-log_path", "/home/t500ttt/RucDDBS/data2/"
+        //     ],
+        //     "stopAtEntry": false,
+        //     "cwd": "${workspaceFolder}",
+        //     "environment": [],
+        //     "externalConsole": false,
+        //     "MIMode": "gdb",
+        //     "setupCommands": [
+        //         {
+        //             "description": "Enable pretty-printing for gdb",
+        //             "text": "-enable-pretty-printing",
+        //             "ignoreFailures": true
+        //         },
+        //         {
+        //             "description": "将反汇编风格设置为 Intel",
+        //             "text": "-gdb-set disassembly-flavor intel",
+        //             "ignoreFailures": true
+        //         }
+        //     ],
+        //     "preLaunchTask": "CMake Build"
+        // },
+        // {
+        //     "name": "(gdb) server1",
+        //     "type": "cppdbg",
+        //     "request": "launch",
+        //     "program": "${workspaceFolder}/build/test/transaction/transaction_test",
+        //     "args": [
+        //         "-SERVER_NAME", "server1", 
+        //         "-SERVER_LISTEN_PORT", "8002",
+        //         "-log_path", "/home/t500ttt/RucDDBS/data/"
+        //     ],
+        //     "stopAtEntry": false,
+        //     "cwd": "${workspaceFolder}",
+        //     "environment": [],
+        //     "externalConsole": false,
+        //     "MIMode": "gdb",
+        //     "setupCommands": [
+        //         {
+        //             "description": "Enable pretty-printing for gdb",
+        //             "text": "-enable-pretty-printing",
+        //             "ignoreFailures": true
+        //         }
+        //     ],
+        //     // "preLaunchTask": "CMake Build"
+        // }
+        {
+            "name": "(gdb) workload",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/test/benchmark/benchmark_workload",
+            "args": [
+                "-DIR", "./data1"
+            ],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "CMake Build"
+        },
+        {
+            "name": "(gdb) benchmark1",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/test/benchmark/benchmark_test",
+            "args": [
+                "-DIR", "./data1",
+                "-SERVER_NAME", "server1", 
+                "-SERVER_LISTEN_PORT", "8011",
+                "-log_path", "/home/t500ttt/RucDDBS/data1/"
+            ],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "CMake Build"
+        },
+        {
+            "name": "(gdb) benchmark2",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/test/benchmark/benchmark_test",
+            "args": [
+                "-DIR", "./data2",
+                "-SERVER_NAME", "server2", 
+                "-SERVER_LISTEN_PORT", "8012",
+                "-log_path", "/home/t500ttt/RucDDBS/data2/"
+            ],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+        },
+        {
+            "name": "(gdb) benchmark3",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/test/benchmark/benchmark_test",
+            "args": [
+                "-DIR", "./data3",
+                "-SERVER_NAME", "server3", 
+                "-SERVER_LISTEN_PORT", "8013",
+                "-log_path", "/home/t500ttt/RucDDBS/data3/"
+            ],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+        },
+        {
+            "name": "(gdb) participants",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/test/benchmark/participant",
+            "args": [
+                "-DIR", "./data2",
+                "-SERVER_NAME", "server2", 
+                "-SERVER_LISTEN_PORT", "8012",
+                "-log_path", "/home/t500ttt/RucDDBS/data2/",
+                "-THREAD_NUM", "1"
+            ],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+        }
+    ]
+}

@@ -1,0 +1,121 @@
+syntax="proto3";
+package distributed_plan_service;
+
+option cc_generic_services = true;
+
+// 要实现的是节点接受远程发送来的执行计划, 执行后将将结果进行返回
+
+//存疑
+message Expression {
+    string str_expression = 1;
+}
+
+message ChildPlan {
+    oneof child_plan{
+        SeqScanPlan seq_scan_plan = 1;
+        FilterPlan filter_plan = 2;
+        ProjectionPlan project_plan = 3;
+        InsertPlan insert_plan = 4;
+        DeletePlan delete_plan = 5;
+        UpdatePlan update_plan = 6;
+        NestedLoopJoin nestedloop_join_plan = 7;
+        ValuePlan value_plan = 8;
+        TableGetPlan table_get_pan = 9;
+        DistributedPlan distributed_plan = 10;
+    }
+}
+
+//Insert用, 构建Value tuple
+message ValuePlan {
+    repeated string value = 2;
+    repeated ChildPlan child = 3;
+};
+
+
+//扫描分区计划
+message SeqScanPlan {
+    string db_name = 1;
+    string tab_name = 2;
+    sint32 par_id = 3;
+    repeated ChildPlan child = 4;
+}
+
+//获取key值
+message TableGetPlan {
+    string db_name = 1;
+    string tab_name = 2;
+    sint32 par_id = 3;
+    string key = 4;
+    repeated ChildPlan child = 5;
+}
+
+//过滤器
+message FilterPlan {
+    repeated Expression expression= 1;
+    repeated ChildPlan child = 2;
+}
+
+//插入
+message InsertPlan {
+    string db_name = 1;
+    sint32 tab_id = 2;
+    sint32 par_id = 3;
+    repeated ChildPlan child = 4; 
+}
+
+//删除
+message DeletePlan {
+    string db_name = 1;
+    string tab_name = 2;
+    sint32 par_id = 3;
+    repeated ChildPlan child = 4;
+}
+
+//更新
+message UpdatePlan {
+    string db_name = 1;
+    string tab_name = 2;
+    sint32 par_id = 3;
+    repeated ChildPlan child = 4;
+}
+
+//投影
+message ProjectionPlan {
+    string tab_name = 1;
+    repeated string col_name = 2;
+    repeated ChildPlan child = 3;
+}
+
+enum JoinType {
+    INVALID = 0;
+    LEFT = 1;
+    RIGHT = 3;
+    INNER = 4;
+    OUTER = 5;
+};
+
+//嵌套循环
+message NestedLoopJoin {
+    JoinType jointype = 1;
+    repeated ChildPlan child = 2;
+}
+
+//分布式执行计划
+message DistributedPlan {
+    message Node {
+        string ip_addr = 1;
+        sint32 port = 2;
+        // ChildPlan child = 3;
+    }
+    repeated Node nodes = 1;
+    repeated ChildPlan plans = 2;
+}
+
+message RemotePlan {
+    ChildPlan child = 1;
+    uint64 txn_id = 2;
+}
+
+service RemotePlanNode {
+    rpc SendRemotePlan(RemotePlan) returns (ValuePlan);
+};

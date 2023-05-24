@@ -1,0 +1,34 @@
+syntax="proto3";
+package benchmark_service;
+
+option cc_generic_services = true;
+
+// 要实现的是其他事务层接收读写操作序列并执行
+
+message OperatorRequest{
+    uint64 txn_id = 1;
+    string key = 2;
+    string value = 3;
+    enum OP_TYPE{
+        Get = 0;
+        Put = 1;
+        Del = 2;
+    }; 
+    OP_TYPE op_type = 4;
+}
+message OperatorResponse{
+    bool ok = 1;
+}
+
+message StartTxnRequest{
+    uint64 txn_id = 1;
+}
+
+message StartTxnResponse{
+    bool ok = 1;
+}
+
+service BenchmarkService {
+    rpc SendOperator(OperatorRequest) returns (OperatorResponse);
+    rpc StartTxn(StartTxnRequest) returns(StartTxnResponse);
+};

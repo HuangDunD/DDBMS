@@ -1,0 +1,34 @@
+syntax="proto3";
+package transaction_manager;
+
+//要实现的是事务模块, 各个节点接收事务的提交或回滚请求, 执行之后并返回客户端
+
+option cc_generic_services = true;
+
+message AbortRequest {
+    uint64 txn_id = 1;
+};
+message AbortResponse {
+    bool ok = 1;
+}
+
+message PrepareRequest {
+    uint64 txn_id = 1;
+};
+
+message PrepareResponse {
+    bool ok = 1;
+}
+
+message CommitRequest {
+    uint64 txn_id = 1;
+};
+message CommitResponse {
+    bool ok = 1;
+}
+
+service TransactionManagerService {
+    rpc AbortTransaction(AbortRequest) returns (AbortResponse);
+    rpc PrepareTransaction(PrepareRequest) returns (PrepareResponse);
+    rpc CommitTransaction(CommitRequest) returns(CommitResponse);
+};

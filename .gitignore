@@ -1,0 +1,9 @@
+deps/
+build/*
+.git-old/*
+**/build/*
+data/
+data1/
+data2/
+data3/
+./vscode

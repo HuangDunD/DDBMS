@@ -1,0 +1,168 @@
+syntax="proto3";
+package meta_service;
+
+//要实现的是各个节点向meta server发起调用请求来获取所需要分区的id和Location
+
+option cc_generic_services = true;
+
+message PartionkeyNameRequest {
+    string db_name = 1;
+    string tab_name = 2;
+};
+
+message PartionkeyNameResponse {
+    string partition_key_name = 1;
+};
+
+message PartitionLocationRequest {
+    string db_name = 1;
+    string tab_name = 2;
+    string partition_key_name = 3;
+    // message IntRange
+    // {
+    //     int64 min_range = 1;
+    //     int64 max_range = 2;
+    // }
+    message StringRange
+    {
+        string min_range = 1;
+        string max_range = 2;
+    }
+    StringRange string_partition_range = 5;
+};
+
+// enum Role{
+//     INVALID_ROLE = 0;
+//     Leader = 1;
+//     Follower = 2;
+// };
+
+message PartitionLocationResponse {
+    // sint32 partition_cnt = 1;
+    message ReplicaLocation
+    {
+        string ip_addr = 1;
+        sint32 port = 2;
+    };
+    // repeated sint32 p_id = 2;
+    // repeated ReplicaLocation partition_location = 3;
+    map<sint32, ReplicaLocation> pid_partition_location = 2;
+};
+
+message CreateDatabaseRequest {
+    string db_name = 1;
+}
+
+message CreateDatabaseResponse {
+    bool success = 1;
+}
+
+message CreateTableRequest {
+    string db_name = 1;
+    string tab_name = 2;
+    repeated string col_name = 3;
+    repeated sint32 col_type = 4;
+}
+
+message CreateTableResponse {
+    sint32 oid = 1;
+    bool success = 2;
+}
+
+enum PartitionType_proto{
+    NONE_PARTITION=0; //非分区表
+    RANGE_PARTITION=1; //RANGE分区
+    HASH_PARTITION=2;  //HASH分区
+};
+
+enum ColType_proto {
+    TYPE_INT = 0;
+    TYPE_FLOAT =1;
+    TYPE_STRING = 2;
+};
+
+message CreatePartitonTableRequest{
+    string db_name = 1;
+    string tab_name = 2;
+
+    PartitionType_proto partition_type = 3;
+    string partition_key_name = 4;
+    ColType_proto partition_key_type = 5; //分区列属性
+    sint32 partition_cnt = 6; //分区数
+    
+    message Range {
+        string min_range = 1;
+        string max_range = 2;
+    }
+    repeated Range range = 7; //存放分区的范围 Range分区需要 Hash分区无须填写
+
+    bool has_replica = 8;
+    sint32 replica_cnt = 9;
+
+    repeated string col_name = 10;
+    repeated sint32 col_type = 11;
+}
+
+message CreatePartitonTableResponse{
+    sint32 oid = 1;
+    bool success = 2;
+}
+
+message GetTableInfoRequest{
+    string db_name = 1;
+    string tab_name = 2;
+}
+
+message GetTableInfoResponse{
+    repeated string col_name = 1;
+    repeated sint32 col_type = 2;
+}
+
+message RegisterRequest{
+    bool sayhello = 1;
+    string server_name = 2;
+    uint32 server_listen_port = 3;
+}
+
+message RegisterResponse{
+    bool register_ok = 1;
+}
+
+message UpdateLeaderRequest{
+    string db_name = 1;
+    string tab_name = 2;
+    sint32 par_id = 3;
+}
+
+message UpdateLeaderResponse{
+    bool update_leader_ok = 1; 
+}
+
+message getTimeStampRequest{}
+
+message getTimeStampResponse{
+    uint64 timestamp = 1;
+}
+
+// for fault tolerance
+message getNewCoorRequest{
+    string fault_ip = 1;
+    uint32 port = 2;
+}
+message getNowCoorResponse{
+    string new_coor_ip = 1;
+    uint32 port = 2;
+}
+
+service MetaService {
+    rpc GetPartitionKey(PartionkeyNameRequest) returns (PartionkeyNameResponse);
+    rpc GetPartitionLocation(PartitionLocationRequest) returns (PartitionLocationResponse);
+    rpc CreateDataBase(CreateDatabaseRequest) returns (CreateDatabaseResponse);
+    rpc CreateTable(CreateTableRequest) returns (CreateTableResponse);
+    rpc CreatePartitionTable(CreatePartitonTableRequest) returns (CreatePartitonTableResponse);
+    rpc NodeRegister(RegisterRequest) returns (RegisterResponse);
+    rpc UpdateLeader(UpdateLeaderRequest) returns (UpdateLeaderResponse);
+    rpc GetTimeStamp(getTimeStampRequest) returns (getTimeStampResponse);
+    rpc GetTableInfo(GetTableInfoRequest) returns (GetTableInfoResponse);
+    rpc GetNewCoordinator(getNewCoorRequest) returns (getNowCoorResponse);
+};
